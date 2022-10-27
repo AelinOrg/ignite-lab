@@ -10,14 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Atualiza nosso projeto
       - name: Checkout
         uses: actions/checkout@v3
 
+      # Instala o node na nossa maquina
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
+      # Comando customizado que funciona como o npm ci.
+      # Significa que estamos dizendo que é uma instalação
+      # não interativa. Além disso, não altera o `*.lock`
       - name: Install dependencies
         run: yarn ci
 
@@ -27,4 +32,5 @@ jobs:
       - name: Deploy Storybook
         run: yarn deploy-storybook -- --ci --existing-output-dir=storybook-static
         env:
+          # Variáveis expostas por padrão pelo GitHub
           GH_TOKEN: ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}
